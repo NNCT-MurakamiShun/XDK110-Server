@@ -8,4 +8,13 @@ html
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
   body
-    = yield
+    nav.navbar.navbar-dark.bg-dark
+      span.navbar-brand.mb-0.h1 = link_to 'XDK110', devices_path, class: 'text-light'
+
+
+    main.container-fluid
+      = yield
+
+    sass:
+      body main
+        padding-top: 1rem;

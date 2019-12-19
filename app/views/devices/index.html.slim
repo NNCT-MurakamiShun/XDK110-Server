@@ -1,11 +1,37 @@
-table
-  tr
-    th Device ID
-    th name
-    th created
 
-  - @devices.each do |device|
-    tr
-      td device.id
-      td device.name
-      td device.created_at
+.row
+  .col-sm-1
+  .col-sm-10
+    table.table.table-hover.text-center
+      thead.thead-light
+        tr
+          th Device ID
+          th Name
+          th Created
+      tbody
+        - @devices.each do |device|
+          tr onclick="flip_device_detail(#{device.id}, #{device.sensors.size+2});"
+            td id="device_id_row_#{device.id}" = device.id
+            td = link_to device.name, device_path(device)
+            td = device.created_at
+          - if device.sensors.size>0
+            tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
+              th Sensor ID
+              th Name
+            - device.sensors.each do |sensor|
+              tr style="display: none;" class="hidden_detail_#{device.id}"
+                td = sensor.id
+                td = sensor.name
+          - else
+            tr style="display: none;" class="hidden_detail_#{device.id}"
+              th colspan="2" No Sensors
+
+
+javascript:
+  function flip_device_detail(id, rows){
+    $(`.hidden_detail_${id}`).each(function(index, element){
+      $(element).toggle();
+    });
+    var table_data = $(`#device_id_row_${id}`)[0];
+    table_data.rowSpan=(table_data.rowSpan==1 ? rows : 1);
+  }
