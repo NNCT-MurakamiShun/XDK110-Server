@@ -2,9 +2,14 @@ module API
   class SensorValuesController < API::ApplicationController
     before_action :set_sensor, only: [:update, :destroy]
 
+    def index
+      values = SensorValue.pluck(:value).where(sensor_id: params[:sensor_id]).order(:created_at)
+      render values
+    end
+
     def create
-      @sensor = SensorValue.new(value: sensor_params[:value])
-      if @sensor.save
+      value = SensorValue.new(sensor_id: params[:sensor_id], value: sensor_params[:value])
+      if value.save
         render status: :created
       else
         render status: :bad_request
@@ -15,10 +20,6 @@ module API
 
     def sensor_params
       params.permit(:name, :value)
-    end
-
-    def set_sensor
-      @sensor = Sensor.find(params[:id])
     end
 
   end

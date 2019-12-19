@@ -2,12 +2,14 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   namespace 'api' do
     resources :devices, only: [] do
-      resources :sensors, only: [:show, :create, :update, :destroy] do
-        resources :sensor_values, only: [:create]
+      resources :sensors, only: [] do
+        resources :sensor_values, only: [:index, :create]
       end
     end
   end
 
-  resources :devices
+  resources :devices do
+    resources :sensors, only: [:create, :update, :destroy]
+  end
 
 end
