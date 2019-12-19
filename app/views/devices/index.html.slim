@@ -1,0 +1,11 @@
+table
+  tr
+    th Device ID
+    th name
+    th created
+
+  - @devices.each do |device|
+    tr
+      td device.id
+      td device.name
+      td device.created_at
