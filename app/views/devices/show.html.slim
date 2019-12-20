@@ -2,25 +2,51 @@
   - @device.sensors.each do |sensor|
     .col-xl-4.col-lg-6
       p.h1 = sensor.name
-
+      .form-group
+        .row
+          .col
+            label.h6 for="interval_for_#{sensor.id}" Update Interval [ms]
+            input.form-control type="number" min="500" value="1000" step="100" id="interval_for_#{sensor.id}"
+          .col
+            label.h6 for="samples_for_#{sensor.id}" Render data count
+            input.form-control type="number" min="5" value="100" id="samples_for_#{sensor.id}"
+          .col
+            label.h6 for="threshold_for_#{sensor.id}" Threshold
+            input.form-control type="text"
       canvas id="canvas_for_#{sensor.id}"
 
       javascript:
-        var ctx = $('#canvas_for_#{sensor.id}');
-        console.log(ctx);
-        var chart = new Chart(ctx, {
+
+        var chart_#{sensor.id} = new Chart($('#canvas_for_#{sensor.id}'), {
           type: 'line',
-          data: {
-            labels: [1,2,3,4,5,6,7,4.5],
+            data: {
+              labels: [],
             datasets: [
-              {
-                label: '#{sensor.name}',
-                data: [5,6,7,8,9,0,1,4],
-                borderColor: "rgba(255,0,0,1)",
-                backgroundColor: "rgba(0,0,0,0)"
-              }
-            ]
-          },
-          options: {
-          }
-        });
+                {
+                  label: '#{sensor.name}',
+                  data: [],
+                  borderColor: "rgba(255,0,0,1)",
+                  backgroundColor: "rgba(0,0,0,0)"
+                }
+              ]
+            },
+            options: {
+            }
+          });
+
+        function update_graph_#{sensor.id}(){
+          $.get(
+            "/api/devices/#{@device.id}/sensors/#{sensor.id}/sensor_values",
+            function(data){
+              const time_data = data.map(function(row){return row['created_at']});
+              const value_data = data.map(function(row){return row['value']});
+
+              chart_#{sensor.id}.data.labels = time_data;
+
+              chart_#{sensor.id}.data.datasets[0].data = value_data;
+
+              chart_#{sensor.id}.update();
+          });
+        }
+
+        setInterval(update_graph_#{sensor.id}, 1000);

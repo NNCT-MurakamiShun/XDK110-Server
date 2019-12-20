@@ -1,10 +1,10 @@
-module API
-  class SensorValuesController < API::ApplicationController
+module Api
+  class SensorValuesController < Api::ApplicationController
     before_action :set_sensor, only: [:update, :destroy]
 
     def index
-      values = SensorValue.pluck(:value).where(sensor_id: params[:sensor_id]).order(:created_at)
-      render values
+      values = SensorValue.where(sensor_id: params[:sensor_id]).order(:created_at)
+      render json: values
     end
 
     def create
