@@ -2,3 +2,25 @@
   - @device.sensors.each do |sensor|
     .col-xl-4.col-lg-6
       p.h1 = sensor.name
+
+      canvas id="canvas_for_#{sensor.id}"
+
+      javascript:
+        var ctx = $('#canvas_for_#{sensor.id}');
+        console.log(ctx);
+        var chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [1,2,3,4,5,6,7,4.5],
+            datasets: [
+              {
+                label: '#{sensor.name}',
+                data: [5,6,7,8,9,0,1,4],
+                borderColor: "rgba(255,0,0,1)",
+                backgroundColor: "rgba(0,0,0,0)"
+              }
+            ]
+          },
+          options: {
+          }
+        });
