@@ -8,12 +8,17 @@
           th Device ID
           th Name
           th Created
+          th btn
       tbody
         - @devices.each do |device|
-          tr onclick="flip_device_detail(#{device.id}, #{device.sensors.size+2});"
+          tr onclick="flip_device_detail(#{device.id}, #{device.sensors.size+3});"
             td id="device_id_row_#{device.id}" = device.id
             td = link_to device.name, device_path(device)
             td = device.created_at
+            td
+              = form_with url: devices_path, method: :delete do |f|
+                = f.submit "delete", class: "btn btn-danger"
+
           - if device.sensors.size>0
             tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
               th Sensor ID
@@ -23,8 +28,20 @@
                 td = sensor.id
                 td = sensor.name
           - else
-            tr style="display: none;" class="hidden_detail_#{device.id}"
+            tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
               th colspan="2" No Sensors
+          tr style="display: none;" class="hidden_detail_#{device.id}"
+              = form_with model: Sensor.new, url: device_sensors_path(device), local: true do |f|
+                th
+                  = f.submit "create new sensor", class: "btn btn-primary"
+                th
+                  = f.text_field :name, class: "form-control", required: true
+
+        = form_with model: Device.new, url: devices_path, local: true do |f|
+          th
+            = f.submit "create new device", class: "btn btn-primary"
+          th colspan="2"
+            = f.text_field :name, class: "form-control", required: true
 
 
 javascript:

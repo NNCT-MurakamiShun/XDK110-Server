@@ -3,7 +3,7 @@ module Api
     before_action :set_sensor, only: [:update, :destroy]
 
     def index
-      values = SensorValue.where(sensor_id: params[:sensor_id]).order(:created_at)
+      values = ::SensorValuesFinder.new(params[:sensor_id], search_params).values
       render json: values
     end
 
@@ -19,8 +19,11 @@ module Api
     private
 
     def sensor_params
-      params.permit(:name, :value)
+      params.permit(:value)
     end
 
+    def search_params
+      params.permit(:count)
+    end
   end
 end

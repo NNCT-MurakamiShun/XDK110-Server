@@ -21,6 +21,7 @@ class SensorsController < ApplicationController
 
   def sensor_params
     params.require(:sensor).permit(:name)
+        .merge(params.permit(:device_id))
   end
 
   def set_sensor
