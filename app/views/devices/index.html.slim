@@ -16,33 +16,36 @@
             td = link_to device.name, device_path(device)
             td = device.created_at
             td
-              = form_with url: devices_path, method: :delete do |f|
+              = form_with url: device_path(device), method: :delete, local: true do |f|
                 = f.submit "delete", class: "btn btn-danger"
 
           - if device.sensors.size>0
             tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
               th Sensor ID
               th Name
+              th
             - device.sensors.each do |sensor|
               tr style="display: none;" class="hidden_detail_#{device.id}"
                 td = sensor.id
                 td = sensor.name
+                td
+                  = form_with url: device_sensor_path(device, sensor), method: :delete, local: true do |f|
+                    = f.submit "delete", class: "btn btn-danger"
           - else
             tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
-              th colspan="2" No Sensors
+              th colspan="3" No Sensors
           tr style="display: none;" class="hidden_detail_#{device.id}"
               = form_with model: Sensor.new, url: device_sensors_path(device), local: true do |f|
+                th colspan="2"
+                  = f.text_field :name, class: "form-control", required: true
                 th
                   = f.submit "create new sensor", class: "btn btn-primary"
-                th
-                  = f.text_field :name, class: "form-control", required: true
 
         = form_with model: Device.new, url: devices_path, local: true do |f|
+          th colspan="3"
+            = f.text_field :name, class: "form-control", required: true
           th
             = f.submit "create new device", class: "btn btn-primary"
-          th colspan="2"
-            = f.text_field :name, class: "form-control", required: true
-
 
 javascript:
   function flip_device_detail(id, rows){

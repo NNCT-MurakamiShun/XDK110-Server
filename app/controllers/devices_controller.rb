@@ -16,9 +16,9 @@ class DevicesController < ApplicationController
   def create
     @device = Device.new(device_params)
     if @device.save
-      redirect_to :show
+      redirect_to @device
     else
-      render :new
+      redirect_to action: :index
     end
   end
 
@@ -37,7 +37,7 @@ class DevicesController < ApplicationController
   def destroy
     @device.destroy
 
-    redirect_to :index
+    redirect_to action: :index
   end
 
   private

@@ -8,18 +8,27 @@ module Api
     end
 
     def create
-      value = SensorValue.new(sensor_id: params[:sensor_id], value: sensor_params[:value])
-      if value.save
-        render status: :created
+      if SensorValue.insert_all(sensor_params)
+        head :created
       else
-        render status: :bad_request
+        head :bad_request
       end
     end
 
     private
 
     def sensor_params
-      params.permit(:value)
+      params.permit(values: [
+        :id,
+        :val
+      ])[:values].map{|item|
+        item = {
+          sensor_id: item[:id],
+          value: item[:val],
+          created_at: Time.zone.now,
+          updated_at: Time.zone.now
+        }
+      }
     end
 
     def search_params
