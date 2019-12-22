@@ -12,25 +12,50 @@
       tbody
         - @devices.each do |device|
           tr onclick="flip_device_detail(#{device.id}, #{device.sensors.size+3});"
-            td id="device_id_row_#{device.id}" = device.id
-            td = link_to device.name, device_path(device)
-            td = device.created_at
-            td
-              = form_with url: device_path(device), method: :delete, local: true do |f|
-                = f.submit "delete", class: "btn btn-danger"
+            td.align-middle.h6 id="device_id_row_#{device.id}" = device.id
+            td.align-middle.h6 = link_to device.name, device_path(device)
+            td.align-middle = device.created_at
+            td.align-middle
+              button.btn.btn-danger type="button" data-toggle="modal" data-target="#warning_delete_device#{device.id}_modal" Delete
+              div.modal.fade id="warning_delete_device#{device.id}_modal" tabindex="-1" role="dialog" aria-hidden="true"
+                div.modal-dialog role="document"
+                  div.modal-content
+                    div.modal-header
+                      h4.modal-title.text-danger Warning
+                      button.close type="button" data-dismiss="modal" aria-label="Close"
+                        span aria-hidden="true" &times;
+                    div.modal-body
+                      h6 Selected device and sensors will be deleted!
+                    div.modal-footer
+                      button.btn.btn-secondary type="button" data-dismiss="modal" Close
+                      = form_with url: device_path(device), method: :delete, local: true do |f|
+                        = f.submit "Delete device", class: "btn btn-danger"
 
           - if device.sensors.size>0
             tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
               th Sensor ID
               th Name
               th
-            - device.sensors.each do |sensor|
+            - device.sensors.sort{|a,b| a.id<=>b.id}.each do |sensor|
               tr style="display: none;" class="hidden_detail_#{device.id}"
-                td = sensor.id
-                td = sensor.name
-                td
-                  = form_with url: device_sensor_path(device, sensor), method: :delete, local: true do |f|
-                    = f.submit "delete", class: "btn btn-danger"
+                td.align-middle = sensor.id
+                td.align-middle = sensor.name
+                td.align-middle
+                  button.btn.btn-danger type="button" data-toggle="modal" data-target="#warning_delete_sensor#{sensor.id}_modal" Delete
+                  div.modal.fade id="warning_delete_sensor#{sensor.id}_modal" tabindex="-1" role="dialog" aria-hidden="true"
+                    div.modal-dialog role="document"
+                      div.modal-content
+                        div.modal-header
+                          h4.modal-title.text-danger Warning
+                          button.close type="button" data-dismiss="modal" aria-label="Close"
+                            span aria-hidden="true" &times;
+                        div.modal-body
+                          h6 Selected Sensor will be deleted!
+                        div.modal-footer
+                          button.btn.btn-secondary type="button" data-dismiss="modal" Close
+                          = form_with url: device_sensor_path(device, sensor), method: :delete, local: true do |f|
+                            = f.submit "Delete sensor", class: "btn btn-danger"
+
           - else
             tr.bg-light style="display: none;" class="hidden_detail_#{device.id}"
               th colspan="3" No Sensors

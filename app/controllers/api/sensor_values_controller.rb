@@ -1,7 +1,5 @@
 module Api
   class SensorValuesController < Api::ApplicationController
-    before_action :set_sensor, only: [:update, :destroy]
-
     def index
       values = ::SensorValuesFinder.new(params[:sensor_id], search_params).values
       render json: values
@@ -18,7 +16,8 @@ module Api
     private
 
     def sensor_params
-      params.permit(values: [
+      ActionController::Parameters.new(JSON.parse(request.body.read))
+      .permit(values: [
         :id,
         :val
       ])[:values].map{|item|

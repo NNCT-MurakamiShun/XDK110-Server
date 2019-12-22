@@ -1,6 +1,6 @@
 .row
   - @device.sensors.each do |sensor|
-    .col-xl-4.col-lg-6
+    .col-xl-6
       p.h1 = "#{sensor.id}. #{sensor.name}"
       .form-group
         .row
@@ -20,7 +20,6 @@
       canvas id="canvas_for_#{sensor.id}"
 
       javascript:
-
         var chart_#{sensor.id} = new Chart($('#canvas_for_#{sensor.id}'), {
           type: 'line',
             data: {
@@ -30,17 +29,20 @@
                   label: '#{sensor.name}',
                   data: [],
                   borderColor: "rgba(0,255,0,1)",
-                  backgroundColor: "rgba(0,0,0,0)"
+                  backgroundColor: "rgba(0,0,0,0)",
+                  pointRadius: 1
                 },
                 {
                   label: 'th_#{sensor.name}',
                   data: [],
                   borderColor: "rgba(0,0,0,1)",
-                  backgroundColor: "rgba(0,0,0,0)"
+                  backgroundColor: "rgba(0,0,0,0)",
+                  pointRadius: 0
                 }
               ]
             },
             options: {
+              animation: false,
               legend: {
                 display: false
               },

@@ -9,8 +9,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :devices do
+  resources :devices, only: [:index, :show, :create, :destroy] do
     resources :sensors, only: [:create, :update, :destroy]
   end
+
+  root to: 'application#routing_error'
+  match '*path', to: 'application#routing_error', via: :all
 
 end

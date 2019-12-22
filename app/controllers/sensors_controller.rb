@@ -4,7 +4,7 @@ class SensorsController < ApplicationController
   def create
     @sensor = Sensor.new(sensor_params)
     @sensor.save
-    redirect_to device_path(params[:device_id])
+    redirect_to devices_path
   end
 
   def update
