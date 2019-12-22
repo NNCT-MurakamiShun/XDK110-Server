@@ -108,7 +108,11 @@
 
               chart_#{sensor.id}.update();
           });
-          setTimeout(update_graph_#{sensor.id}, Math.max($("#interval_for_#{sensor.id}").val(),500));
+
+          if($("#interval_for_#{sensor.id}").length > 0){
+            const interval = $("#interval_for_#{sensor.id}").val();
+            setTimeout(update_graph_#{sensor.id}, Math.max(isNaN(interval)?1000:interval,500));
+          }
         }
 
         update_graph_#{sensor.id}();
