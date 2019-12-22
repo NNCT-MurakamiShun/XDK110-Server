@@ -3,20 +3,25 @@
     .col-xl-6
       p.h1 = "#{sensor.id}. #{sensor.name}"
       .form-group
-        .row
-          .col-sm-4
-            label.h6 for="interval_for_#{sensor.id}" Update Interval [ms]
-            input.form-control type="number" min="100" value="1000" step="100" id="interval_for_#{sensor.id}"
-          .col-sm-4
-            label.h6 for="samples_for_#{sensor.id}" Samples Count
-            input.form-control type="number" min="1" value="100" id="samples_for_#{sensor.id}"
-          .col-sm-4
-            label.h6 for="threshold_for_#{sensor.id}" Threshold
-            input.form-control type="text" id="threshold_for_#{sensor.id}"
-        .row
-          .col-sm-6
-            label.h6 for="date_format_for_#{sensor.id}" Date Format
-            input.form-control type="text" id="date_format_for_#{sensor.id}" value="MM/DD/YYYY/ hh:mm:ss"
+        = form_with model: sensor.chart_setting, url: api_sensor_chart_setting_path(sensor.id), method: :put do |f|
+          .row
+            .col-sm-4
+              label.h6 for="interval_for_#{sensor.id}" Update Interval [ms]
+              = f.number_field :interval, class: "form-control", min:"100", step: "100", id: "interval_for_#{sensor.id}", value: "#{sensor.chart_setting.interval}"
+            .col-sm-4
+              label.h6 for="samples_for_#{sensor.id}" Samples Count
+              = f.number_field :samples, class: "form-control", min:"1", id: "samples_for_#{sensor.id}", value: "#{sensor.chart_setting.samples}"
+            .col-sm-4
+              label.h6 for="threshold_for_#{sensor.id}" Threshold
+              = f.text_field :threshold, class: "form-control", id: "threshold_for_#{sensor.id}", value: "#{sensor.chart_setting.threshold}"
+          .row
+            .col-sm-6
+              label.h6 for="date_format_for_#{sensor.id}" Date Format
+              = f.text_field :date_format, class: "form-control", id: "date_format_for_#{sensor.id}", value: "#{sensor.chart_setting.date_format}"
+            .col-sm-6
+              .text-center
+                p.h6 Save Chart Settings
+                = f.submit "Save", class: "btn btn-primary"
       canvas id="canvas_for_#{sensor.id}"
 
       javascript:
@@ -70,7 +75,7 @@
 
         function update_graph_#{sensor.id}(){
           $.get(
-            "/api/devices/#{@device.id}/sensors/#{sensor.id}/sensor_values",
+            "/api/sensors/#{sensor.id}/sensor_values",
             {count: $("#samples_for_#{sensor.id}").val()},
             function(data){
               const time_data = data.map(function(row){

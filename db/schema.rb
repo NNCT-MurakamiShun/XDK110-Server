@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_19_130516) do
+ActiveRecord::Schema.define(version: 2019_12_22_092638) do
+
+  create_table "chart_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "sensor_id", null: false
+    t.integer "interval"
+    t.integer "samples"
+    t.float "threshold"
+    t.string "date_format", limit: 30
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sensor_id"], name: "index_chart_settings_on_sensor_id"
+  end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name"
@@ -34,6 +45,7 @@ ActiveRecord::Schema.define(version: 2019_12_19_130516) do
     t.index ["device_id"], name: "index_sensors_on_device_id"
   end
 
+  add_foreign_key "chart_settings", "sensors"
   add_foreign_key "sensor_values", "sensors"
   add_foreign_key "sensors", "devices"
 end

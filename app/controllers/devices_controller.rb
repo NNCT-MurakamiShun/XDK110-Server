@@ -25,7 +25,6 @@ class DevicesController < ApplicationController
 
   def destroy
     @device.destroy
-
     redirect_to action: :index
   end
 

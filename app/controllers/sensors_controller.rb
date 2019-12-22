@@ -2,8 +2,7 @@ class SensorsController < ApplicationController
   before_action :set_sensor, only: [:update, :destroy]
 
   def create
-    @sensor = Sensor.new(sensor_params)
-    @sensor.save
+    Sensors::CreateService.new(sensor_params).execute
     redirect_to devices_path
   end
 
