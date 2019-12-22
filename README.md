@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Sensor Monitor
 
-Things you may want to cover:
+* Quick start
+```
+$ source env.sh
+$ build  
+$ bundle install
+$ rails db:create
+$ up
+```
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Packet example from sensor
+Please send json file to `POST /api/sensor_values` 
+```json
+{
+	"values": [
+		{"id": 1, "val": 30.1 },
+		{"id": 2, "val": 1913}
+	]
+}
+```
+* Author
+Murakmi Shun (Nagano-NCT)
