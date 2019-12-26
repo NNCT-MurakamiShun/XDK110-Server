@@ -1,0 +1,4 @@
+:schedule:
+  DeleteUnnecessarySensorValuesJob:
+    every: 1m
+    args: ""
